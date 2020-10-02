@@ -6,12 +6,12 @@ pygame.init()
 FPS = 30
 screen = pygame.display.set_mode((800, 600))
 
-def draw_man(surface, x, y, width, height):
+def draw_man(surface, x, y, height):
     '''
     Функция рисует мужчину
     surface - объект pygame.Surface
     x, y - координаты самой нижней средней точки, от которой будет нарисован мужчина
-    wight, height - ширина тела и высота человека 
+    height - высота человека 
     '''
     
     def draw_mans_body(surface, x, y, width, height, color):
@@ -44,8 +44,9 @@ def draw_man(surface, x, y, width, height):
         cos - косинус угла наклона рук
         color - цвет изображения 
         '''
-        line(surface, color, (x - width // 3, y), (x - width // 3 - length * cos, y + length / cos))
-        line(surface, color, (x + width // 3, y), (x + width // 3 + length * cos, y + length / cos))
+        sin = (1 - cos ** 2) ** (1 / 2)
+        line(surface, color, (x - width // 4, y), (x - width // 3 - length * cos, y + length * sin))
+        line(surface, color, (x + width // 4, y), (x + width // 3 + length * cos, y + length * sin))
         
     def draw_mans_legs(surface, x, y, width, height, length, color):
         '''
@@ -57,25 +58,33 @@ def draw_man(surface, x, y, width, height):
         length - длина ступни
         color - цвет изображения
         '''
-        lines(surface, color, False, [(x - width // 4, y), (x - width // 4, y + height), (x - width // 4 - length, y + height)])
+        a = 0.2 #случайный параметр для наклона ноги
+        lines(surface, color, False, [(x - width // 4, y), (x - width // 4 - a * height, y + height), (x - width // 4 - a * height  - length, y + height)])
         lines(surface, color, False, [(x + width // 4, y), (x + width // 4, y + height), (x + width // 4 + length, y + height)])
 
-    body_y = y - height * 2 // 3
+    #ширина человека
+    width = height // 4
+    #тело
+    body_y = y - height // 3
     body_color = (128, 128, 128)
     body_height = height // 2
-    head_y = y - height * 3 // 4
-    head_width = height // 4
+    #голова 
+    head_y = y - height * 4 // 5
+    head_width = height // 5
     head_color = (255, 222, 173)
-    hands_y = body_y - body_height * 0.8
+    #руки
+    hands_y = body_y - body_height * 0.9
     hands_cos = 0.5
     hands_length = height // 3
     hands_color = (0, 0, 0)
-    legs_y = body_y - body_height // 5
+    #ноги
+    legs_y = body_y - body_height // 10
     legs_height = y - legs_y
     legs_length = legs_height // 4
     legs_color = (0, 0, 0)
 
-    draw_mans_body(surface, x, body_y, width, body_height)
+    #непосредственно рисование 
+    draw_mans_body(surface, x, body_y, width, body_height, body_color)
     draw_mans_head(surface, x, head_y, head_width, head_color)
     draw_mans_hands(surface, x, hands_y, width, hands_cos, hands_length, hands_color)
     draw_mans_legs(surface, x, legs_y, width, legs_height, legs_length, legs_color)
@@ -111,6 +120,9 @@ def draw_balloon(surface, x, y, width, height, color):
     '''
     '''
     pass
+
+rect(screen, (255, 255, 255), (0, 0, 800, 600))
+draw_man(screen, 400, 500, 450)
 
 pygame.display.update()
 clock = pygame.time.Clock()
