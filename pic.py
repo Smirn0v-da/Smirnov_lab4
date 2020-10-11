@@ -64,43 +64,54 @@ def draw_house(surface, x, y, width, height, window_radius):
     draw_window(surface, x, window_y, window_radius)
 
 
-def cloud(x, y, r):
-    for i in range(1, 5):
+def draw_cloud(surface, x, y, r):
+    '''
+    Функция рисует облака
+    surface - объект pygame.Surface
+    x, y - координаты центра нижнего левого кружка облака 
+    r - радиус кружков, из которых состоит облако 
+    '''
+    for i in range(4):
         circle(screen, (255, 255, 255), (x + r * i, y), r)
         circle(screen, (0, 0, 0), (x + i * r, y), r, 1)
-    for i in range(1, 3):
+    for i in range(2):
         circle(screen, (255, 255, 255), (x + r * (i + 1), y - r), r)
         circle(screen, (0, 0, 0), (x + (i + 1) * r, y - r), r, 1)
 
 
-def tree(x, y, l, wid, r):
-    polygon(screen, (139, 69, 19), ((x, y), (x + wid, y), (x + wid, y + 2 * l),
-                                    (x - wid, y + 2 * l), (x - wid, y), (x, y)))
-    for k in range(1, 3):
+def draw_tree(surface, x, y, width, height, r):
+    '''
+    Функция рисует дерево
+    surface - объект pygame.Surface
+    x, y - координаты нижней центральной точки дерева
+    width - ширина ствола
+    height - высота всего дерева
+    r - радиус кружков, из которых состоит крона
+    '''
+    polygon(screen, (139, 69, 19), [(x + width // 2, y), (x + width // 2, y - height + r * 3),
+                                    (x - width // 2, y - height + r * 3), (x - width // 2, y)])
+    y -= height - r * 3
+    for i in range(2):
         circle(screen, (0, 255, 0), (x, y - 3 * r), r)
         circle(screen, (0, 0, 0), (x, y - 3 * r), r, 1)
         circle(screen, (0, 255, 0), (x - r, y - 2 * r), r)
         circle(screen, (0, 0, 0), (x - r, y - 2 * r), r, 1)
         circle(screen, (0, 255, 0), (int(x + 0.6 * r), y - 2 * r), r)
         circle(screen, (0, 0, 0), (int(x + 0.6 * r), y - 2 * r), r, 1)
-        y += int(1.5 * r)
+        y += r * 3 // 2
 
 
 screen = pygame.display.set_mode((800, 600))
 rect(screen, (135, 206, 250), (0, 0, 800, 350))
 rect(screen, (0, 255, 127), (0, 350, 800, 250))
 draw_house(screen, 150, 430, 220, 225, 45)
-tree(550, 270, 60, 15, 40)
-tree(700, 290, 65, 14, 39)
-tree(480, 300, 55, 13, 37)
+draw_tree(screen, 550, 390, 30, 240, 40)
+draw_tree(screen, 700, 420, 28, 247, 39)
+draw_tree(screen, 480, 410, 26, 221, 37)
 draw_house(screen, 380, 520, 200, 180, 35)
-cloud(200, 100, 35)
-cloud(580, 90, 40)
-cloud(50, 50, 25)
-
-
-
-#sun(100, 100, 255, 255, 0)
+draw_cloud(screen, 235, 100, 35)
+draw_cloud(screen, 620, 90, 40)
+draw_cloud(screen, 75, 50, 25)
 
 
 pygame.display.update()
